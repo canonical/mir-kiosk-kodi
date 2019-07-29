@@ -28,24 +28,28 @@ layout:
   /usr/share:
     bind: $SNAP/usr/share
 
+plugs:
+  wayland:
+  opengl:
+  pulseaudio:
+  alsa:
+  avahi-observe:
+  hardware-observe:
+  locale-control:
+  mount-observe:
+  network-observe:
+  removable-media:
+  shutdown:
+  system-observe:
+
 apps:
   kodi:
     command: bin/kodi-launch.sh
     daemon: simple
     restart-condition: on-failure
-    plugs:
-      - wayland
-      - opengl
-      - pulseaudio
-      - alsa
-      - avahi-observe
-      - hardware-observe
-      - locale-control
-      - mount-observe
-      - network-observe
-      - removable-media
-      - shutdown
-      - system-observe
+
+  mir-kiosk-kodi:
+    command: bin/kodi-launch.sh
 
 parts:
   glue:
