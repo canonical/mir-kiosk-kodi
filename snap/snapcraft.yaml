@@ -27,10 +27,6 @@ environment:
 layout:
   /usr/share:
     bind: $SNAP/usr/share
-  /etc/glvnd:
-    bind: $SNAP/etc/glvnd
-  /etc/fonts:
-    bind: $SNAP/etc/fonts
 
 apps:
   kodi:
