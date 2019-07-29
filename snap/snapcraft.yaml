@@ -50,6 +50,7 @@ apps:
 
   mir-kiosk-kodi:
     command: bin/kodi-launch.sh
+    desktop: usr/share/applications/kodi.desktop
 
 parts:
   glue:
