@@ -6,6 +6,10 @@ confinement: strict
 grade: devel
 base: core18
 
+architectures:
+  - build-on: amd64
+  - build-on: i386
+
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
