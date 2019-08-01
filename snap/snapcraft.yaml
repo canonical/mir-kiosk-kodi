@@ -43,7 +43,7 @@ plugs:
   system-observe:
 
 apps:
-  kodi:
+  daemon:
     command: bin/kodi-launch.sh
     daemon: simple
     restart-condition: on-failure
