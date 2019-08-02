@@ -3,7 +3,7 @@ adopt-info: kodi
 summary: Kodi packaged as a mir-kiosk snap
 description: Kodi-wayland packaged as a mir-kiosk snap
 confinement: strict
-grade: devel
+grade: stable
 base: core18
 
 architectures:
