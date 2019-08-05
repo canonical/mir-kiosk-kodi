@@ -9,4 +9,4 @@ while [ ! -O "${real_wayland}" ]; do echo waiting for Wayland socket; sleep 4; d
 
 ln -sf "${real_wayland}" "$XDG_RUNTIME_DIR"
 
-WINDOWING=wayland exec "${SNAP}/usr/bin/kodi" "$0"
+WINDOWING=wayland exec "${SNAP}/usr/bin/kodi" "$@"

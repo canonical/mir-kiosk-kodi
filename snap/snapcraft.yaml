@@ -44,7 +44,7 @@ plugs:
 
 apps:
   daemon:
-    command: bin/kodi-launch.sh
+    command: bin/kodi-daemon.sh
     daemon: simple
     restart-condition: on-failure
     environment:
