@@ -5,6 +5,7 @@ description: Kodi-wayland packaged as a mir-kiosk snap
 confinement: strict
 grade: stable
 base: core18
+license: GPL-2.0
 
 architectures:
   - build-on: amd64
