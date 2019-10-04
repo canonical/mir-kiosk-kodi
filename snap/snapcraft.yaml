@@ -75,7 +75,6 @@ parts:
       snapcraftctl stage
     stage-packages:
       - kodi-wayland
-      - kodi-repository-kodi
       - kodi-visualization-spectrum
       - samba-libs
       - libfstrcmp0
