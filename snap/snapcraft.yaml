@@ -49,7 +49,7 @@ apps:
   daemon:
     command: run-daemon wayland-launch ${SNAP}/usr/bin/kodi
     daemon: simple
-    restart-condition: on-failure
+    restart-condition: always
     environment:
       # Prep PulseAudio
       PULSE_SYSTEM: 1
