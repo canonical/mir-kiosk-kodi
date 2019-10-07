@@ -82,9 +82,11 @@ parts:
       - libpulse0
 
   mesa:
-    plugin: nil
+    plugin: ppa
+    ppa: wsnipex/vaapi
     stage-packages:
       - libgl1-mesa-dri
+      - i965-va-driver
 
   mir-kiosk-snap-launch:
     plugin: dump
