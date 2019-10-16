@@ -58,6 +58,7 @@ plugs:
   removable-media:
   shutdown:
   system-observe:
+  optical-drive:
   graphics-core20:
     interface: content
     target: $SNAP/graphics
