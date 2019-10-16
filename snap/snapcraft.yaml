@@ -44,6 +44,7 @@ plugs:
   removable-media:
   shutdown:
   system-observe:
+  optical-drive:
 
 apps:
   daemon:
@@ -88,4 +89,8 @@ parts:
   mir-kiosk-snap-launch:
     plugin: dump
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
-    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe removable-media shutdown system-observe wayland
+    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe removable-media shutdown system-observe wayland optical-drive
+
+  hack:
+    plugin: dump
+    source: hack
