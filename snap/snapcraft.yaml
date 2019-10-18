@@ -34,6 +34,7 @@ layout:
 plugs:
   wayland:
   opengl:
+  audio-playback:
   pulseaudio:
   alsa:
   avahi-observe:
