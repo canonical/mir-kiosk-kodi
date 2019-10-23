@@ -85,6 +85,7 @@ parts:
     plugin: nil
     stage-packages:
       - libgl1-mesa-dri
+      - va-driver-all
 
   mir-kiosk-snap-launch:
     plugin: dump
