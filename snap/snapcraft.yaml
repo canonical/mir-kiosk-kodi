@@ -14,22 +14,35 @@ architectures:
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
-  LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}:${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
+  LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}:${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
   PATH: $SNAP/bin/:$SNAP/usr/bin/:${PATH}
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
-  XDG_CONFIG_DIRS: ${SNAP}/etc/xdg:$XDG_CONFIG_DIRS
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
-  # Prep EGL
-  __EGL_VENDOR_LIBRARY_DIRS: $SNAP/etc/glvnd/egl_vendor.d:$SNAP/usr/share/glvnd/egl_vendor.d
-  LIBGL_DRIVERS_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
-  LIBVA_DRIVERS_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
   # Prep Kodi
   WINDOWING: wayland
 
 layout:
-  /usr/share:
-    bind: $SNAP/usr/share
+  /etc/glvnd:
+    bind: $SNAP/etc/glvnd
+  /etc/samba/smb.conf:
+    symlink: $SNAP/usr/share/samba/smb.conf
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
+  /usr/share/glvnd:
+    bind: $SNAP/usr/share/glvnd
+  /usr/share/kodi:
+    bind: $SNAP/usr/share/kodi
+  /usr/share/samba:
+    bind: $SNAP/usr/share/samba
+  /usr/share/X11/xkb:
+    bind: $SNAP/usr/share/X11/xkb
 
 plugs:
   wayland:
@@ -48,7 +61,7 @@ plugs:
 
 apps:
   daemon:
-    command: run-daemon wayland-launch ${SNAP}/usr/bin/kodi
+    command: run-daemon wayland-launch $SNAP/usr/bin/kodi
     daemon: simple
     restart-condition: always
     environment:
@@ -57,7 +70,7 @@ apps:
       PULSE_RUNTIME_PATH: /var/run/pulse
 
   mir-kiosk-kodi:
-    command: wayland-launch ${SNAP}/usr/bin/kodi
+    command: wayland-launch $SNAP/usr/bin/kodi
     desktop: usr/share/applications/kodi.desktop
     environment:
       # Prep PulseAudio
@@ -71,16 +84,16 @@ parts:
       snapcraftctl set-version $kodi_version
     plugin: ppa
     ppa: team-xbmc/ppa
-    override-stage: |
-      sed --in-place s'!/usr!${SNAP}/usr!' $SNAPCRAFT_PART_INSTALL/usr/bin/kodi
-      snapcraftctl stage
     stage-packages:
       - kodi-wayland
       - kodi-visualization-spectrum
       - samba-libs
+      - samba-common-bin
+      - samba-common
       - libfstrcmp0
       - libpulse0
-
+      - libsndio6.1
+      - libaudio2
   mesa:
     plugin: nil
     stage-packages:
