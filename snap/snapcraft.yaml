@@ -25,8 +25,6 @@ environment:
 layout:
   /etc/glvnd:
     bind: $SNAP/etc/glvnd
-  /etc/samba/smb.conf:
-    symlink: $SNAP/usr/share/samba/smb.conf
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi:
