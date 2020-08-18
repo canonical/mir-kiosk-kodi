@@ -4,7 +4,7 @@ summary: Kodi packaged as a mir-kiosk snap
 description: Kodi-wayland packaged as a mir-kiosk snap
 confinement: strict
 grade: stable
-base: core18
+base: core20
 license: GPL-2.0
 
 architectures:
@@ -59,7 +59,7 @@ plugs:
 
 apps:
   daemon:
-    command: run-daemon wayland-launch $SNAP/usr/bin/kodi
+    command: bin/run-daemon wayland-launch $SNAP/usr/bin/kodi
     daemon: simple
     restart-condition: always
     environment:
@@ -68,7 +68,7 @@ apps:
       PULSE_RUNTIME_PATH: /var/run/pulse
 
   mir-kiosk-kodi:
-    command: wayland-launch $SNAP/usr/bin/kodi
+    command: bin/wayland-launch $SNAP/usr/bin/kodi
     desktop: usr/share/applications/kodi.desktop
     environment:
       # Prep PulseAudio
@@ -76,21 +76,22 @@ apps:
 
 parts:
   kodi:
+    plugin: nil
     override-pull: |
       snapcraftctl pull
       kodi_version=`LANG=C apt-cache policy kodi-wayland | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
       snapcraftctl set-version $kodi_version
-    plugin: ppa
-    ppa: team-xbmc/ppa
     stage-packages:
+      - kodi
       - kodi-wayland
       - kodi-visualization-spectrum
+      - python
       - samba-libs
       - samba-common-bin
       - samba-common
       - libfstrcmp0
       - libpulse0
-      - libsndio6.1
+      - libsndio7.0
       - libaudio2
   mesa:
     plugin: nil
