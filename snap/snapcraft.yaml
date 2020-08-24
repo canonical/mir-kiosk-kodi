@@ -87,6 +87,7 @@ parts:
       - kodi
       - kodi-wayland
       - kodi-visualization-spectrum
+      - kodi-repository-kodi
       - python
       - samba-libs
       - samba-common-bin
