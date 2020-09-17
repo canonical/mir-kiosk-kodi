@@ -77,7 +77,18 @@ apps:
       PULSE_SERVER: unix:$XDG_RUNTIME_DIR/../pulse/native
 
 parts:
+  ppa-setup:
+    plugin: nil
+    # Use the upstream PPA where possible
+    override-pull: |
+      if [ "$SNAP_ARCH" = "amd64" ] || [ "$SNAP_ARCH" = "i386" ]; then
+        sudo apt --assume-yes install software-properties-common
+        sudo add-apt-repository -yu ppa:team-xbmc/ppa
+        snapcraftctl pull
+      fi
+
   kodi:
+    after: [ ppa-setup ]
     plugin: nil
     override-pull: |
       snapcraftctl pull
