@@ -105,8 +105,9 @@ parts:
       - samba-common
       - libfstrcmp0
       - libpulse0
-      - libsndio7.0
       - libaudio2
+      - try: [libsndio7.0]  # core20
+      - else: [libsndio6.1] # core18
   mesa:
     plugin: nil
     stage-packages:
