@@ -54,6 +54,7 @@ plugs:
   hardware-observe:
   locale-control:
   mount-observe:
+  network-bind:
   network-observe:
   removable-media:
   shutdown:
@@ -99,6 +100,7 @@ parts:
       - kodi-wayland
       - kodi-visualization-spectrum
       - kodi-repository-kodi
+      - kodi-inputstream-adaptive
       - python
       - samba-libs
       - samba-common-bin
@@ -117,6 +119,6 @@ parts:
   mir-kiosk-snap-launch:
     plugin: dump
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
-    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe removable-media shutdown system-observe wayland
+    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe network-bind removable-media shutdown system-observe wayland
     stage-packages:
       - inotify-tools
