@@ -118,3 +118,5 @@ parts:
     plugin: dump
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
     override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe removable-media shutdown system-observe wayland
+    stage-packages:
+      - inotify-tools
