@@ -100,7 +100,8 @@ parts:
       - kodi-wayland
       - kodi-visualization-spectrum
       - kodi-repository-kodi
-      - on amd64,i386: [kodi-inputstream-adaptive] # only available for x86
+      - on amd64: [kodi-inputstream-adaptive] # only available for x86
+      - on i386: [kodi-inputstream-adaptive] # only available for x86
       - python
       - samba-libs
       - samba-common-bin
