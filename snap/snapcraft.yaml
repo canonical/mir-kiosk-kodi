@@ -1,7 +1,7 @@
 name: mir-kiosk-kodi
 adopt-info: kodi
 summary: Kodi packaged as a mir-kiosk snap
-description: Kodi-wayland packaged as a mir-kiosk snap
+description: Kodi packaged as a mir-kiosk snap
 confinement: strict
 grade: stable
 base: core20
@@ -93,7 +93,7 @@ parts:
     plugin: nil
     override-pull: |
       snapcraftctl pull
-      kodi_version=`LANG=C apt-cache policy kodi-wayland | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
+      kodi_version=`LANG=C apt-cache policy kodi | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
       snapcraftctl set-version $kodi_version
     stage-packages:
       - kodi
