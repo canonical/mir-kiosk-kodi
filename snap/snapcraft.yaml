@@ -97,7 +97,6 @@ parts:
       snapcraftctl set-version $kodi_version
     stage-packages:
       - kodi
-      - kodi-wayland
       - kodi-visualization-spectrum
       - kodi-repository-kodi
       - on amd64: [kodi-inputstream-adaptive] # only available for x86
