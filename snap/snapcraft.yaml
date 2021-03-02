@@ -1,7 +1,7 @@
 name: mir-kiosk-kodi
 adopt-info: kodi
 summary: Kodi packaged as a mir-kiosk snap
-description: Kodi-wayland packaged as a mir-kiosk snap
+description: Kodi packaged as a mir-kiosk snap
 confinement: strict
 grade: stable
 base: core20
@@ -21,8 +21,8 @@ environment:
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
-  # Prep Kodi
   WINDOWING: wayland
+  WAYLAND_DISPLAY: wayland-0
 
 layout:
   /etc/glvnd:
@@ -93,16 +93,14 @@ parts:
     plugin: nil
     override-pull: |
       snapcraftctl pull
-      kodi_version=`LANG=C apt-cache policy kodi-wayland | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
+      kodi_version=`LANG=C apt-cache policy kodi | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
       snapcraftctl set-version $kodi_version
     stage-packages:
-      - kodi
-      - kodi-wayland
+      - on amd64: [kodi, python3]
+      - else: [kodi-wayland, python]
+      - on amd64,i386: [kodi-inputstream-adaptive]
       - kodi-visualization-spectrum
       - kodi-repository-kodi
-      - on amd64: [kodi-inputstream-adaptive] # only available for x86
-      - on i386: [kodi-inputstream-adaptive] # only available for x86
-      - python
       - samba-libs
       - samba-common-bin
       - samba-common
