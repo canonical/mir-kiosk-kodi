@@ -16,13 +16,12 @@ architectures:
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
-  LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}:${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
+  LD_LIBRARY_PATH: ${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
   PATH: $SNAP/bin/:$SNAP/usr/bin/:${PATH}
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
   WINDOWING: wayland
-  WAYLAND_DISPLAY: wayland-0
 
 layout:
   /etc/glvnd:
