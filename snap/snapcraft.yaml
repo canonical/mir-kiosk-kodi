@@ -21,8 +21,7 @@ environment:
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
-  # Prep Kodi
-  WINDOWING: wayland
+  WAYLAND_DISPLAY: wayland-0
 
 layout:
   /etc/glvnd:
@@ -101,7 +100,7 @@ parts:
       - kodi-repository-kodi
       - on amd64: [kodi-inputstream-adaptive] # only available for x86
       - on i386: [kodi-inputstream-adaptive] # only available for x86
-      - python
+      - python3
       - samba-libs
       - samba-common-bin
       - samba-common
