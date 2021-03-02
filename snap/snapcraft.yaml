@@ -21,6 +21,7 @@ environment:
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
+  WINDOWING: wayland
   WAYLAND_DISPLAY: wayland-0
 
 layout:
@@ -95,12 +96,11 @@ parts:
       kodi_version=`LANG=C apt-cache policy kodi | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
       snapcraftctl set-version $kodi_version
     stage-packages:
-      - kodi
+      - on amd64: [kodi, python3]
+      - else: [kodi-wayland, python]
+      - on amd64,i386: [kodi-inputstream-adaptive]
       - kodi-visualization-spectrum
       - kodi-repository-kodi
-      - on amd64: [kodi-inputstream-adaptive] # only available for x86
-      - on i386: [kodi-inputstream-adaptive] # only available for x86
-      - python3
       - samba-libs
       - samba-common-bin
       - samba-common
