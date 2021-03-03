@@ -16,13 +16,12 @@ architectures:
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
-  LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}:${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
+  LD_LIBRARY_PATH: ${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
   PATH: $SNAP/bin/:$SNAP/usr/bin/:${PATH}
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
   WINDOWING: wayland
-  WAYLAND_DISPLAY: wayland-0
 
 layout:
   /etc/glvnd:
@@ -96,7 +95,8 @@ parts:
       kodi_version=`LANG=C apt-cache policy kodi | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
       snapcraftctl set-version $kodi_version
     stage-packages:
-      - on amd64: [kodi, python3]
+      - kodi
+      - on amd64: [python3]
       - else: [kodi-wayland, python]
       - on amd64,i386: [kodi-inputstream-adaptive]
       - kodi-visualization-spectrum
@@ -118,6 +118,8 @@ parts:
   mir-kiosk-snap-launch:
     plugin: dump
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
-    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe network-bind removable-media shutdown system-observe wayland
+    override-build: |
+      sed "s/^exec /WAYLAND_DISPLAY=\${WAYLAND_DISPLAY:-wayland-0} exec /" -i $SNAPCRAFT_PART_BUILD/bin/wayland-launch
+      $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe network-bind removable-media shutdown system-observe wayland
     stage-packages:
       - inotify-tools
