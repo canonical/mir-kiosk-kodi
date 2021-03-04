@@ -96,9 +96,10 @@ parts:
       snapcraftctl set-version $kodi_version
     stage-packages:
       - kodi
-      - on amd64: [python3]
-      - else: [kodi-wayland, python]
-      - on amd64,i386: [kodi-inputstream-adaptive]
+      - to amd64: [kodi-inputstream-adaptive, python3, libsndio7.0]
+      - to i386:  [kodi-inputstream-adaptive, python3, libsndio6.1]
+      - to armhf: [kodi-wayland, python, libsndio7.0]
+      - to arm64: [kodi-wayland, python, libsndio7.0]
       - kodi-visualization-spectrum
       - kodi-repository-kodi
       - samba-libs
@@ -107,8 +108,6 @@ parts:
       - libfstrcmp0
       - libpulse0
       - libaudio2
-      - try: [libsndio7.0]  # core20
-      - else: [libsndio6.1] # core18
   mesa:
     plugin: nil
     stage-packages:
