@@ -16,8 +16,9 @@ architectures:
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
-  LD_LIBRARY_PATH: ${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba:$SNAP/graphics/lib
-  PATH: $SNAP/bin/:$SNAP/usr/bin/:${PATH}
+  LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$SNAP/graphics/lib
+  LIBGL_DRIVERS_PATH: $SNAP/graphics/dri
+  LIBVA_DRIVERS_PATH: $SNAP/graphics/dri
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
@@ -26,8 +27,6 @@ environment:
 layout:
   /etc/glvnd:
     bind: $SNAP/etc/glvnd
-  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
-    bind: $SNAP/graphics/dri
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:
