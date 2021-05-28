@@ -16,7 +16,7 @@ architectures:
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
-  LD_LIBRARY_PATH: ${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
+  LD_LIBRARY_PATH: ${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba:$SNAP/graphics/lib
   PATH: $SNAP/bin/:$SNAP/usr/bin/:${PATH}
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
@@ -27,7 +27,7 @@ layout:
   /etc/glvnd:
     bind: $SNAP/etc/glvnd
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
-    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+    bind: $SNAP/graphics/dri
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:
@@ -58,6 +58,10 @@ plugs:
   removable-media:
   shutdown:
   system-observe:
+  graphics-core20:
+    interface: content
+    target: $SNAP/graphics
+    default-provider: mesa-core20
 
 apps:
   daemon:
@@ -94,6 +98,21 @@ parts:
       snapcraftctl pull
       kodi_version=`LANG=C apt-cache policy kodi | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
       snapcraftctl set-version $kodi_version
+    override-build: |
+      snapcraftctl build
+      rm -rf $SNAPCRAFT_PART_INSTALL/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+      for file in \
+        libdrm_amdgpu.so*\
+        libdrm_intel.so*\
+        libdrm_nouveau.so*\
+        libdrm_radeon.so*\
+        libdrm.so.2*\
+        libglapi.so*\
+        libLLVM-11.so*\
+        libpciaccess.so*\
+        libsensors.so*\
+        libvulkan.so*
+      do rm -f $SNAPCRAFT_PART_INSTALL/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/$file; done
     stage-packages:
       - kodi
       - to amd64: [kodi-inputstream-adaptive, python3, libsndio7.0]
@@ -107,11 +126,6 @@ parts:
       - libfstrcmp0
       - libpulse0
       - libaudio2
-  mesa:
-    plugin: nil
-    stage-packages:
-      - libgl1-mesa-dri
-      - va-driver-all
 
   mir-kiosk-snap-launch:
     plugin: dump
@@ -119,5 +133,18 @@ parts:
     override-build: |
       sed "s/^exec /WAYLAND_DISPLAY=\${WAYLAND_DISPLAY:-wayland-0} exec /" -i $SNAPCRAFT_PART_BUILD/bin/wayland-launch
       $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe network-bind removable-media shutdown system-observe wayland
+      rm -rf $SNAPCRAFT_PART_INSTALL/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+      for file in \
+        libdrm_amdgpu.so*\
+        libdrm_intel.so*\
+        libdrm_nouveau.so*\
+        libdrm_radeon.so*\
+        libdrm.so.2*\
+        libglapi.so*\
+        libLLVM-11.so*\
+        libpciaccess.so*\
+        libsensors.so*\
+        libvulkan.so*
+      do rm -f $SNAPCRAFT_PART_INSTALL/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/$file; done
     stage-packages:
       - inotify-tools
