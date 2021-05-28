@@ -15,26 +15,12 @@ jobs:
     timeout-minutes: 30
 
     steps:
-    - name: Install Snapcraft
-      uses: samuelmeuli/action-snapcraft@v1
-      with:
-        snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
-        use_lxd: true
-
     - name: Check out code
       uses: actions/checkout@v2
 
-    - name: Build and verify the snap
-      env:
-        SNAPCRAFT_BUILD_INFO: 1
-        SNAP_ENFORCE_RESQUASHFS: 0
-      run: |
-        sg lxd -c '/snap/bin/snapcraft --use-lxd'
-
-        sudo snap install review-tools
-        /snap/bin/review-tools.snap-review *.snap
-
-    - name: Publish the snap
-      if: ${{ github.event_name == 'pull_request' && github.repository == github.event.pull_request.head.repo.full_name }}
-      run: |
-        snapcraft upload *.snap --release "edge/pr${{ github.event.number }}"
+    - name: Build and publish the snap
+      uses: canonical/actions/build-snap@release
+      with:
+        snapcraft-token: ${{ secrets.SNAPCRAFT_TOKEN }}
+        publish: ${{ github.event_name == 'pull_request' && github.repository == github.event.pull_request.head.repo.full_name }}
+        publish-channel: edge/pr${{ github.event.number }}

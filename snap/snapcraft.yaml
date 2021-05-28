@@ -98,10 +98,9 @@ parts:
       - kodi
       - to amd64: [kodi-inputstream-adaptive, python3, libsndio7.0]
       - to i386:  [kodi-inputstream-adaptive, python3, libsndio6.1]
-      - to armhf: [kodi-wayland, python, libsndio7.0]
-      - to arm64: [kodi-wayland, python, libsndio7.0]
+      - to armhf: [kodi-wayland, kodi-repository-kodi, python, libsndio7.0]
+      - to arm64: [kodi-wayland, kodi-repository-kodi, python, libsndio7.0]
       - kodi-visualization-spectrum
-      - kodi-repository-kodi
       - samba-libs
       - samba-common-bin
       - samba-common
