@@ -97,21 +97,6 @@ parts:
       snapcraftctl pull
       kodi_version=`LANG=C apt-cache policy kodi | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
       snapcraftctl set-version $kodi_version
-    override-build: |
-      snapcraftctl build
-      rm -rf $SNAPCRAFT_PART_INSTALL/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
-      for file in \
-        libdrm_amdgpu.so*\
-        libdrm_intel.so*\
-        libdrm_nouveau.so*\
-        libdrm_radeon.so*\
-        libdrm.so.2*\
-        libglapi.so*\
-        libLLVM-11.so*\
-        libpciaccess.so*\
-        libsensors.so*\
-        libvulkan.so*
-      do rm -f $SNAPCRAFT_PART_INSTALL/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/$file; done
     stage-packages:
       - kodi
       - to amd64: [kodi-inputstream-adaptive, python3, libsndio7.0]
@@ -125,6 +110,18 @@ parts:
       - libfstrcmp0
       - libpulse0
       - libaudio2
+    stage: # Don't include mesa parts we should get from graphics-core20
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_amdgpu.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_intel.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_nouveau.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_radeon.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm.so.2*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libglapi.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libLLVM-11.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libpciaccess.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libsensors.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libvulkan.so*
 
   mir-kiosk-snap-launch:
     plugin: dump
@@ -132,18 +129,17 @@ parts:
     override-build: |
       sed "s/^exec /WAYLAND_DISPLAY=\${WAYLAND_DISPLAY:-wayland-0} exec /" -i $SNAPCRAFT_PART_BUILD/bin/wayland-launch
       $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe network-bind removable-media shutdown system-observe wayland
-      rm -rf $SNAPCRAFT_PART_INSTALL/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
-      for file in \
-        libdrm_amdgpu.so*\
-        libdrm_intel.so*\
-        libdrm_nouveau.so*\
-        libdrm_radeon.so*\
-        libdrm.so.2*\
-        libglapi.so*\
-        libLLVM-11.so*\
-        libpciaccess.so*\
-        libsensors.so*\
-        libvulkan.so*
-      do rm -f $SNAPCRAFT_PART_INSTALL/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/$file; done
     stage-packages:
       - inotify-tools
+    stage: # Don't include mesa parts we should get from graphics-core20
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_amdgpu.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_intel.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_nouveau.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_radeon.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm.so.2*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libglapi.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libLLVM-11.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libpciaccess.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libsensors.so*
+      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libvulkan.so*
