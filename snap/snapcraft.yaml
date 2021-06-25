@@ -110,18 +110,6 @@ parts:
       - libfstrcmp0
       - libpulse0
       - libaudio2
-    stage: # Don't include mesa parts we should get from graphics-core20
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_amdgpu.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_intel.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_nouveau.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_radeon.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm.so.2*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libglapi.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libLLVM-11.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libpciaccess.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libsensors.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libvulkan.so*
 
   mir-kiosk-snap-launch:
     plugin: dump
@@ -131,15 +119,16 @@ parts:
       $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe network-bind removable-media shutdown system-observe wayland
     stage-packages:
       - inotify-tools
-    stage: # Don't include mesa parts we should get from graphics-core20
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_amdgpu.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_intel.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_nouveau.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm_radeon.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libdrm.so.2*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libglapi.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libLLVM-11.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libpciaccess.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libsensors.so*
-      - -usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libvulkan.so*
+
+  cleanup:
+    after: [kodi, mir-kiosk-snap-launch]
+    plugin: nil
+    build-snaps: [ mesa-core20 ]
+    override-prime: |
+      set -eux
+      cd /snap/mesa-core20/current/egl/lib
+      find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/{} \;
+      rm -fr "$SNAPCRAFT_PRIME/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri"
+      for CRUFT in bug lintian man; do
+        rm -rf "$SNAPCRAFT_PRIME/usr/share/$CRUFT"
+      done
