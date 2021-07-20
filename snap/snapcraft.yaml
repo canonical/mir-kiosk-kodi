@@ -16,8 +16,9 @@ architectures:
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
-  LD_LIBRARY_PATH: ${SNAP}/usr/lib/:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
-  PATH: $SNAP/bin/:$SNAP/usr/bin/:${PATH}
+  LD_LIBRARY_PATH:    $SNAP/graphics/lib
+  LIBGL_DRIVERS_PATH: $SNAP/graphics/dri
+  LIBVA_DRIVERS_PATH: $SNAP/graphics/dri
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
@@ -26,8 +27,6 @@ environment:
 layout:
   /etc/glvnd:
     bind: $SNAP/etc/glvnd
-  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
-    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:
@@ -58,6 +57,10 @@ plugs:
   removable-media:
   shutdown:
   system-observe:
+  graphics-core20:
+    interface: content
+    target: $SNAP/graphics
+    default-provider: mesa-core20
 
 apps:
   daemon:
@@ -107,11 +110,6 @@ parts:
       - libfstrcmp0
       - libpulse0
       - libaudio2
-  mesa:
-    plugin: nil
-    stage-packages:
-      - libgl1-mesa-dri
-      - va-driver-all
 
   mir-kiosk-snap-launch:
     plugin: dump
@@ -121,3 +119,16 @@ parts:
       $SNAPCRAFT_PART_BUILD/build-with-plugs.sh alsa avahi-observe hardware-observe locale-control mount-observe network-observe network-bind removable-media shutdown system-observe wayland
     stage-packages:
       - inotify-tools
+
+  cleanup:
+    after: [kodi, mir-kiosk-snap-launch]
+    plugin: nil
+    build-snaps: [ mesa-core20 ]
+    override-prime: |
+      set -eux
+      cd /snap/mesa-core20/current/egl/lib
+      find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/{} \;
+      rm -fr "$SNAPCRAFT_PRIME/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri"
+      for CRUFT in bug lintian man; do
+        rm -rf "$SNAPCRAFT_PRIME/usr/share/$CRUFT"
+      done
