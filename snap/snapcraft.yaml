@@ -41,6 +41,8 @@ layout:
     bind: $SNAP/usr/share/samba
   /usr/share/X11/xkb:
     bind: $SNAP/usr/share/X11/xkb
+  /usr/share/libdrm:
+    bind: $SNAP/graphics/libdrm
 
 plugs:
   wayland:
