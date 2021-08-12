@@ -26,16 +26,12 @@ environment:
   WINDOWING: wayland
 
 layout:
-  /etc/glvnd:
-    bind: $SNAP/etc/glvnd
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/kodi
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio
   /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba:
     bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/samba
-  /usr/share/glvnd:
-    bind: $SNAP/usr/share/glvnd
   /usr/share/kodi:
     bind: $SNAP/usr/share/kodi
   /usr/share/samba:
