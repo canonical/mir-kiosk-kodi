@@ -42,8 +42,10 @@ layout:
     bind: $SNAP/usr/share/samba
   /usr/share/X11/xkb:
     bind: $SNAP/usr/share/X11/xkb
-  /usr/share/libdrm:
+  /usr/share/libdrm:  # Needed by mesa-core20 on AMD GPUs
     bind: $SNAP/graphics/libdrm
+  /usr/share/drirc.d:  # Used by mesa-core20 for app specific workarounds
+    bind: $SNAP/graphics/drirc.d
 
 plugs:
   wayland:
@@ -132,6 +134,6 @@ parts:
       cd /snap/mesa-core20/current/egl/lib
       find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/{} \;
       rm -fr "$SNAPCRAFT_PRIME/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri"
-      for CRUFT in bug glvnd libdrm lintian man; do
+      for CRUFT in bug drirc.d glvnd libdrm lintian man; do
         rm -rf "$SNAPCRAFT_PRIME/usr/share/$CRUFT"
       done
