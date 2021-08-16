@@ -115,6 +115,7 @@ parts:
   mir-kiosk-snap-launch:
     plugin: dump
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
+    source-branch: handle_connected_and_content_interfaces_right
     override-build: |
       sed "s/^exec /WAYLAND_DISPLAY=\${WAYLAND_DISPLAY:-wayland-0} exec /" -i $SNAPCRAFT_PART_BUILD/bin/wayland-launch
       $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland network-observe network-bind audio-playback
