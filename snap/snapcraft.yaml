@@ -117,7 +117,7 @@ parts:
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
     override-build: |
       sed "s/^exec /WAYLAND_DISPLAY=\${WAYLAND_DISPLAY:-wayland-0} exec /" -i $SNAPCRAFT_PART_BUILD/bin/wayland-launch
-      $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland network-observe network-bind audio-playback
+      $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland graphics-core20 network-observe network-bind audio-playback
     stage-packages:
       - inotify-tools
 
