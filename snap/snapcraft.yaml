@@ -122,8 +122,17 @@ parts:
     stage-packages:
       - inotify-tools
 
+  libdvdcss:
+    plugin: nil
+    build-packages:
+      - libdvd-pkg
+    override-build: |
+      snapcraftctl build
+      dpkg-reconfigure libdvd-pkg
+      dpkg -x /usr/src/libdvd-pkg/libdvdcss2*.deb $SNAPCRAFT_PART_INSTALL/
+
   cleanup:
-    after: [kodi, mir-kiosk-snap-launch]
+    after: [kodi, libdvdcss, mir-kiosk-snap-launch]
     plugin: nil
     build-snaps: [ mesa-core20 ]
     override-prime: |
