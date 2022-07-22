@@ -80,6 +80,10 @@ apps:
       # Prep PulseAudio
       PULSE_SERVER: unix:$XDG_RUNTIME_DIR/../pulse/native
 
+package-repositories:
+  - type: apt
+    ppa: wsnipex/vaapi
+
 parts:
   ppa-setup:
     plugin: nil
