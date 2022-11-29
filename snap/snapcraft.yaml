@@ -16,10 +16,7 @@ architectures:
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
-  LD_LIBRARY_PATH:           $SNAP/graphics/usr/lib/:$SNAP/graphics/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}:$SNAP/usr/lib/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/blas:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/lapack${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-  LIBGL_DRIVERS_PATH:        $SNAP/graphics/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri/
-  LIBVA_DRIVERS_PATH:        $SNAP/graphics/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri/
-  __EGL_VENDOR_LIBRARY_DIRS: $SNAP/graphics/usr/share/glvnd/egl_vendor.d
+  LD_LIBRARY_PATH: $SNAP/usr/lib/:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/blas:$SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/lapack${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
   # XDG config
   XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
@@ -74,6 +71,8 @@ apps:
       PULSE_RUNTIME_PATH: /var/run/pulse
 
   mir-kiosk-kodi:
+    command-chain:
+      - bin/setup-graphics
     command: bin/wayland-launch $SNAP/usr/bin/kodi
     desktop: usr/share/applications/kodi.desktop
     environment:
@@ -108,6 +107,10 @@ parts:
       $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland graphics-core22 network-observe network-bind audio-playback
     stage-packages:
       - inotify-tools
+
+  scripts:
+    plugin: dump
+    source: scripts
 
   cleanup:
     after: [kodi, mir-kiosk-snap-launch]
