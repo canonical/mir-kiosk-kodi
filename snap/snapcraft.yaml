@@ -58,11 +58,15 @@ plugs:
   graphics-core22:
     interface: content
     target: $SNAP/graphics
-    default-provider: mesa-core22-test
+    default-provider: mesa-core22/edge
 
 apps:
   daemon:
-    command: bin/run-daemon wayland-launch $SNAP/usr/bin/kodi
+    command-chain:
+      - bin/run-daemon
+      - bin/wayland-launch
+      - bin/graphics-core22-wrapper-kodi
+    command: usr/bin/kodi
     daemon: simple
     restart-condition: always
     environment:
@@ -72,8 +76,9 @@ apps:
 
   mir-kiosk-kodi:
     command-chain:
-      - bin/setup-graphics
-    command: bin/wayland-launch $SNAP/usr/bin/kodi
+      - bin/wayland-launch
+      - bin/graphics-core22-wrapper-kodi
+    command: usr/bin/kodi
     desktop: usr/share/applications/kodi.desktop
     environment:
       # Prep PulseAudio
@@ -99,27 +104,19 @@ parts:
       - libpulse0
       - libaudio2
 
-  mir-kiosk-snap-launch:
-    plugin: dump
-    source: https://github.com/MirServer/mir-kiosk-snap-launch.git
-    override-build: |
-      sed "s/^exec /WAYLAND_DISPLAY=\${WAYLAND_DISPLAY:-wayland-0} exec /" -i $SNAPCRAFT_PART_BUILD/bin/wayland-launch
-      $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland graphics-core22 network-observe network-bind audio-playback
-    stage-packages:
-      - inotify-tools
-
   scripts:
     plugin: dump
     source: scripts
+    stage-packages:
+      - inotify-tools
 
-  cleanup:
-    after: [kodi, mir-kiosk-snap-launch]
-    plugin: nil
-    build-snaps: [ mesa-core22-test/latest/edge ]
+  graphics-core22:
+    after: [kodi, scripts]
+    source: https://github.com/MirServer/graphics-core22.git
+    plugin: dump
     override-prime: |
-      set -eux
-      cd /snap/mesa-core22-test/current/usr/
-      find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/usr/{} \;
-      for CRUFT in bug drirc.d glvnd libdrm lintian man; do
-        rm -rf "$SNAPCRAFT_PRIME/usr/share/$CRUFT"
-      done
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/graphics-core22-cleanup mesa-core22
+      rm -rf ${CRAFT_PRIME}/{bug,doc,lintian,man}
+    prime:
+      - bin/graphics-core22-wrapper

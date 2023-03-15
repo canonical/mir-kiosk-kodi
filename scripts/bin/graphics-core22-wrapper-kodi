@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Kodi's gconv bails if the modules found are in the wrong architecture
+exec ${SNAP}/bin/graphics-core22-wrapper env -u GCONV_PATH "$@"
