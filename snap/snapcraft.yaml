@@ -13,6 +13,10 @@ architectures:
   - build-on: armhf
 #  - build-on: i386
 
+package-repositories:
+  - type: apt
+    ppa: team-xbmc/ppa
+
 environment:
   SHELL: bash
   LC_ALL: C.UTF-8
