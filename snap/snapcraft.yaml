@@ -39,8 +39,6 @@ layout:
     bind: $SNAP/usr/share/samba
   /usr/share/X11/xkb:
     bind: $SNAP/usr/share/X11/xkb
-  /usr/share/libdrm:  # Needed by mesa-core22-test on AMD GPUs
-    bind: $SNAP/graphics/usr/share/libdrm
   /usr/share/drirc.d:  # Used by mesa-core22-test for app specific workarounds
     bind: $SNAP/graphics/usr/share/drirc.d
 
