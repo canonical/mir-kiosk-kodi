@@ -65,7 +65,11 @@ plugs:
 
 apps:
   daemon:
-    command: bin/run-daemon wayland-launch $SNAP/usr/bin/kodi
+    command-chain:
+    - bin/run-daemon
+    - bin/wayland-launch
+    - bin/run-kodi
+    command: usr/bin/kodi
     daemon: simple
     restart-condition: always
     environment:
@@ -74,7 +78,10 @@ apps:
       PULSE_RUNTIME_PATH: /var/run/pulse
 
   mir-kiosk-kodi:
-    command: bin/wayland-launch $SNAP/usr/bin/kodi
+    command-chain:
+    - bin/wayland-launch
+    - bin/run-kodi
+    command: usr/bin/kodi
     desktop: usr/share/applications/kodi.desktop
     environment:
       # Prep PulseAudio
@@ -94,6 +101,10 @@ parts:
         sudo add-apt-repository -yu ppa:team-xbmc/ppa
         snapcraftctl pull
       fi
+
+  glue:
+    plugin: dump
+    source: glue
 
   kodi:
     after: [ ppa-setup ]
