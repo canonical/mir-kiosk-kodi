@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# avoid unavailable python bits
+
+unset PYTHONPATH PYTHONHOME
+
+exec "$@"
