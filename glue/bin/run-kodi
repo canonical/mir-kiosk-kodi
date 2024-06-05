@@ -2,6 +2,6 @@
 
 # avoid unavailable python bits
 
-unset PYTHONPATH PYTHONHOME
+unset PYTHONPATH PYTHONHOME GCONV_PATH
 
 exec "$@"

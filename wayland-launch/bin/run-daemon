@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -x
+
+if [ "$(snapctl get daemon)" = "true" ]
+then exec "$@"
+else
+  # It is unlikely, but possible for "snapctl stop ..." to fail
+  # temporarily (e.g. during install/refresh).
+  # Handle failure by ignoring it: it will work next retry.
+  snapctl stop $SNAP_INSTANCE_NAME.daemon || true
+fi
